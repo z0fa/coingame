@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<widget
+  id="com.equinesoft.coingame"
+  version="1.0.0"
+  xmlns="http://www.w3.org/ns/widgets"
+  xmlns:cdv="http://cordova.apache.org/ns/1.0"
+>
+  <name>Pirate Coin Tosser</name>
+  <description>Pirate Coin Tosser: Heads by tap, tails by swipe!</description>
+  <author email="giovannicavallo95@gmail.com" href="https://github.com/z0fa">
+    Giovanni Cavallo
+  </author>
+  <content src="index.html" />
+  <allow-intent href="http://*/*" />
+  <allow-intent href="https://*/*" />
+  <icon src="www/images/icon.png" />
+  <platform name="android">
+    <preference
+      name="AndroidWindowSplashScreenAnimatedIcon"
+      value="www/images/icon.png"
+    />
+  </platform>
+</widget>

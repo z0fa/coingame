@@ -1,15 +1,25 @@
 {
-  "name": "coingame",
+  "name": "com.equinesoft.coingame",
+  "displayName": "Pirate Coin Tosser",
   "version": "1.0.0",
-  "description": "",
+  "description": "Pirate Coin Tosser: Heads by tap, tails by swipe!",
   "main": "index.js",
   "scripts": {
+    "build": "cordova build android --release -- --packageType=bundle",
+    "sign": "jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore my-key.keystore app-release.aab alias_name",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "ecosystem:cordova"
+  ],
+  "author": "Giovanni Cavallo",
+  "license": "Apache-2.0",
   "devDependencies": {
-    "@bubblewrap/cli": "^1.21.0"
+    "cordova-android": "^12.0.1"
+  },
+  "cordova": {
+    "platforms": [
+      "android"
+    ]
   }
 }
