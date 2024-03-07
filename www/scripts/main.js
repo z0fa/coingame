@@ -10,7 +10,7 @@ function toss(val) {
   setTimeout(() => (coin.dataset.state = face), 1000)
 }
 
-const mc = new Hammer(window)
+const mc = new Hammer(document.body)
 mc.get("swipe").set({ direction: Hammer.DIRECTION_ALL })
 mc.on("swipe tap", function (event) {
   toss(event.type === "swipe" ? 1 : 0)
