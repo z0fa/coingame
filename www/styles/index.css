@@ -10,36 +10,45 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: #00b09b;
-  background: -webkit-linear-gradient(to right, #96c93d, #00b09b);
-  background: linear-gradient(to right, #96c93d, #00b09b);
+  background: linear-gradient(45deg, #115dd8 0%, #20aaea 33%, #f1f7da 100%);
 }
 
 #coin {
-  width: 150px;
-  height: 150px;
+  width: 100vw;
+  aspect-ratio: 1/1;
+  position: relative;
+  margin: 10%;
+  max-width: 512px;
+  pointer-events: none;
+}
+
+#coin > img {
+  display: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   overflow: hidden;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   transition: transform 0.5s ease-in-out;
-  margin: 0 auto;
   backface-visibility: hidden;
-  background-image: url("../images/coin.png");
-  background-size: 150px 450px;
-  pointer-events: none;
 }
 
-#coin.flipping {
+#coin[data-state="base"] > #base {
+  display: block;
+}
+#coin[data-state="flip"] > #flip {
+  display: block;
+}
+#coin[data-state="head"] > #head {
+  display: block;
+}
+#coin[data-state="tail"] > #tail {
+  display: block;
+}
+
+#flip {
   animation: spin 1s cubic-bezier(0.4, 2.5, 0.6, 0.5);
-  background-position-y: -300px;
-}
-
-#coin.head {
-  background-position-y: 0px;
-}
-
-#coin.tail {
-  background-position-y: -150px;
 }
 
 @keyframes spin {

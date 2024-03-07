@@ -16,6 +16,10 @@
   <icon src="www/images/icon.png" />
   <platform name="android">
     <preference
+      name="Orientation"
+      value="portrait"
+    />
+    <preference
       name="AndroidWindowSplashScreenAnimatedIcon"
       value="www/images/icon.png"
     />
