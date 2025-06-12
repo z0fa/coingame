@@ -206,3 +206,6 @@ dist
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,node,macos,cordova
+
+/my-key.keystore
+/upload_certificate.pem
