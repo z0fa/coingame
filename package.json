@@ -1,25 +1,26 @@
 {
-  "name": "com.equinesoft.coingame",
-  "displayName": "Pirate Coin Tosser",
+  "name": "capacitor-app",
   "version": "1.0.0",
-  "description": "Pirate Coin Tosser: Heads by tap, tails by swipe!",
-  "main": "index.js",
-  "scripts": {
-    "build": "cordova build android --release -- --packageType=bundle",
-    "sign": "jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore my-key.keystore ./platforms/android/app/build/outputs/bundle/release/app-release.aab alias_name",
-    "init": "cordova platform add android"
-  },
+  "description": "An Amazing Capacitor App",
+  "type": "module",
   "keywords": [
-    "ecosystem:cordova"
+    "capacitor",
+    "mobile"
   ],
-  "author": "Giovanni Cavallo",
-  "license": "Apache-2.0",
-  "cordova": {
-    "platforms": [
-      "android"
-    ]
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@capacitor/core": "latest",
+    "@capacitor/camera": "latest",
+    "@capacitor/splash-screen": "latest"
   },
   "devDependencies": {
-    "cordova-android": "^14.0.1"
-  }
+    "@capacitor/cli": "latest",
+    "vite": "^7.3.1"
+  },
+  "author": "",
+  "license": "ISC"
 }
