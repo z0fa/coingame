@@ -1,12 +1,11 @@
 {
-  "name": "capacitor-app",
+  "name": "com.equinesoft.coingame",
   "version": "1.0.6",
-  "description": "An Amazing Capacitor App",
+  "description": "zCoin: Heads by tap, tails by swipe!",
+  "author": "Giovanni Cavallo",
+  "license": "ISC",
+  "keywords": [],
   "type": "module",
-  "keywords": [
-    "capacitor",
-    "mobile"
-  ],
   "scripts": {
     "start": "vite",
     "build": "vite build",
@@ -21,8 +20,6 @@
     "@capacitor/cli": "latest",
     "vite": "^7.3.1"
   },
-  "author": "",
-  "license": "ISC",
   "allowScripts": {
     "esbuild@0.28.2": true
   }
