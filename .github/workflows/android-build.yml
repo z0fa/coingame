@@ -1,0 +1,92 @@
+name: Android Build
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build web app
+        run: npm run build
+
+      - name: Sync Capacitor Android project
+        run: npx cap sync android
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Prepare upload keystore (from GitHub Secrets)
+        if: ${{ secrets.ANDROID_UPLOAD_KEYSTORE_BASE64 != '' }}
+        working-directory: android
+        env:
+          ANDROID_UPLOAD_KEYSTORE_BASE64: ${{ secrets.ANDROID_UPLOAD_KEYSTORE_BASE64 }}
+        run: |
+          echo "$ANDROID_UPLOAD_KEYSTORE_BASE64" | base64 --decode > upload-keystore.jks
+
+      - name: Build Android artifacts
+        working-directory: android
+        env:
+          ANDROID_UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_UPLOAD_KEYSTORE_PASSWORD }}
+          ANDROID_UPLOAD_KEY_ALIAS: ${{ secrets.ANDROID_UPLOAD_KEY_ALIAS }}
+          ANDROID_UPLOAD_KEY_PASSWORD: ${{ secrets.ANDROID_UPLOAD_KEY_PASSWORD }}
+        run: |
+          chmod +x gradlew
+          if [ -f upload-keystore.jks ] && [ -n "$ANDROID_UPLOAD_KEYSTORE_PASSWORD" ] && [ -n "$ANDROID_UPLOAD_KEY_ALIAS" ] && [ -n "$ANDROID_UPLOAD_KEY_PASSWORD" ]; then
+            ./gradlew bundleRelease assembleRelease assembleDebug \
+              -Pandroid.injected.signing.store.file=upload-keystore.jks \
+              -Pandroid.injected.signing.store.password="$ANDROID_UPLOAD_KEYSTORE_PASSWORD" \
+              -Pandroid.injected.signing.key.alias="$ANDROID_UPLOAD_KEY_ALIAS" \
+              -Pandroid.injected.signing.key.password="$ANDROID_UPLOAD_KEY_PASSWORD" \
+              --stacktrace
+          else
+            ./gradlew bundleRelease assembleDebug --stacktrace
+          fi
+
+      - name: Upload AAB (release)
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-aab
+          path: android/app/build/outputs/bundle/release/*.aab
+          if-no-files-found: error
+
+      - name: Upload APK (debug)
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug-apk
+          path: android/app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+
+      - name: Upload APK (release)
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-apk
+          path: android/app/build/outputs/apk/release/*.apk
+          if-no-files-found: warn
