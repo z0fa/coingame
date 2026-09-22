@@ -60,13 +60,16 @@ jobs:
           ANDROID_UPLOAD_KEY_PASSWORD: ${{ secrets.ANDROID_UPLOAD_KEY_PASSWORD }}
         run: |
           chmod +x gradlew
-          if [ -f upload-keystore.jks ] && [ -n "$ANDROID_UPLOAD_KEYSTORE_PASSWORD" ] && [ -n "$ANDROID_UPLOAD_KEY_ALIAS" ] && [ -n "$ANDROID_UPLOAD_KEY_PASSWORD" ]; then
-            ./gradlew bundleRelease assembleRelease assembleDebug \
-              -Pandroid.injected.signing.store.file=upload-keystore.jks \
+          KEYSTORE_PATH="$PWD/upload-keystore.jks"
+          if [ -f "$KEYSTORE_PATH" ] && [ -n "$ANDROID_UPLOAD_KEYSTORE_PASSWORD" ] && [ -n "$ANDROID_UPLOAD_KEY_ALIAS" ] && [ -n "$ANDROID_UPLOAD_KEY_PASSWORD" ]; then
+            ./gradlew bundleRelease assembleRelease \
+              -Pandroid.injected.signing.store.file="$KEYSTORE_PATH" \
               -Pandroid.injected.signing.store.password="$ANDROID_UPLOAD_KEYSTORE_PASSWORD" \
               -Pandroid.injected.signing.key.alias="$ANDROID_UPLOAD_KEY_ALIAS" \
               -Pandroid.injected.signing.key.password="$ANDROID_UPLOAD_KEY_PASSWORD" \
               --stacktrace
+
+            ./gradlew assembleDebug --stacktrace
           else
             ./gradlew bundleRelease assembleDebug --stacktrace
           fi
