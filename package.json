@@ -1,25 +1,26 @@
 {
   "name": "com.equinesoft.coingame",
-  "displayName": "Pirate Coin Tosser",
-  "version": "1.0.0",
-  "description": "Pirate Coin Tosser: Heads by tap, tails by swipe!",
-  "main": "index.js",
-  "scripts": {
-    "build": "cordova build android --release -- --packageType=bundle",
-    "sign": "jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore my-key.keystore ./platforms/android/app/build/outputs/bundle/release/app-release.aab alias_name",
-    "init": "cordova platform add android"
-  },
-  "keywords": [
-    "ecosystem:cordova"
-  ],
+  "version": "1.0.6",
+  "description": "zCoin: Heads by tap, tails by swipe!",
   "author": "Giovanni Cavallo",
-  "license": "Apache-2.0",
-  "cordova": {
-    "platforms": [
-      "android"
-    ]
+  "license": "ISC",
+  "keywords": [],
+  "type": "module",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@capacitor/android": "8.5.2",
+    "@capacitor/core": "latest",
+    "@capacitor/splash-screen": "latest"
   },
   "devDependencies": {
-    "cordova-android": "^14.0.1"
+    "@capacitor/cli": "latest",
+    "vite": "^7.3.1"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true
   }
 }

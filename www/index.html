@@ -1,46 +1,85 @@
-<!DOCTYPE html>
-<!--
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
-<html>
+<!doctype html>
+<html lang="en" dir="ltr">
   <head>
-    <meta charset="utf-8" />
-    <!--
-        Customize this policy to fit your own app's needs. For more guidance, please refer to the docs:
-            https://cordova.apache.org/docs/en/latest/
-        Some notes:
-            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
-            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
-                * Enable inline JS: add 'unsafe-inline' to default-src
-        -->
+    <meta charset="UTF-8" />
+    <title>zCoin</title>
     <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self' data: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;"
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
-    <meta
-      name="viewport"
-      content="initial-scale=1, width=device-width, viewport-fit=cover"
-    />
-    <meta name="color-scheme" content="light dark" />
-    <title>Pirate Coin Tosser</title>
-    <link rel="stylesheet" href="./styles/index.css" />
+    <link rel="icon" type="image/x-icon" href="./images/favicon.ico" />
+    <link rel="manifest" href="./manifest.json" />
+    <meta name="theme-color" content="#31d53d" />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+        touch-action: none;
+        background: linear-gradient(
+          45deg,
+          #115dd8 0%,
+          #20aaea 33%,
+          #f1f7da 100%
+        );
+      }
+
+      #coin {
+        width: 100vw;
+        aspect-ratio: 1/1;
+        position: relative;
+        margin: 10%;
+        max-width: 512px;
+        pointer-events: none;
+      }
+
+      #coin > img {
+        display: none;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        transition: transform 0.5s ease-in-out;
+        backface-visibility: hidden;
+      }
+
+      #coin[data-state="flip"] > #flip {
+        display: block;
+      }
+      #coin[data-state="head"] > #head {
+        display: block;
+      }
+      #coin[data-state="tail"] > #tail {
+        display: block;
+      }
+
+      #flip {
+        animation: spin 1s cubic-bezier(0.4, 2.5, 0.6, 0.5);
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotateY(0deg);
+        }
+        100% {
+          transform: rotateY(360deg);
+        }
+      }
+    </style>
   </head>
   <body>
     <div id="coin" data-state="head">
@@ -49,8 +88,43 @@
       <img id="tail" src="images/coin-tail.png" alt="" />
     </div>
 
-    <script src="cordova.js"></script>
-    <script src="./scripts/hammer.min.js"></script>
-    <script src="./scripts/main.js"></script>
+    <script type="module">
+      import { SplashScreen } from "@capacitor/splash-screen"
+
+      function toss(val) {
+        const coin = document.querySelector("#coin")
+        const face = val < 0.5 ? "head" : "tail"
+
+        if (coin.dataset.state === "flip") {
+          return
+        }
+
+        coin.dataset.state = "flip"
+        setTimeout(() => (coin.dataset.state = face), 1000)
+      }
+
+      const moveStart = { x: 0, y: 0 }
+      const moveEnd = { x: 0, y: 0 }
+      const moveThreshold = 30
+
+      document.addEventListener("pointerdown", (event) => {
+        moveStart.x = event.screenX
+        moveStart.y = event.screenY
+      })
+
+      document.addEventListener("pointerup", (event) => {
+        moveEnd.x = event.screenX
+        moveEnd.y = event.screenY
+
+        const deltaX = moveEnd.x - moveStart.x
+        const deltaY = moveEnd.y - moveStart.y
+        const isMove =
+          Math.abs(deltaX) > moveThreshold || Math.abs(deltaY) > moveThreshold
+
+        toss(isMove ? 1 : 0)
+      })
+
+      SplashScreen.hide()
+    </script>
   </body>
 </html>

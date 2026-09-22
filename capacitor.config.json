@@ -1,0 +1,10 @@
+{
+  "appId": "com.equinesoft.coingame",
+  "appName": "zCoin",
+  "webDir": "dist",
+  "plugins": {
+    "SplashScreen": {
+      "launchAutoHide": false
+    }
+  }
+}
