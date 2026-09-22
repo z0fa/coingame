@@ -15,8 +15,7 @@
   "dependencies": {
     "@capacitor/android": "8.5.2",
     "@capacitor/core": "latest",
-    "@capacitor/splash-screen": "latest",
-    "hammerjs": "^2.0.8"
+    "@capacitor/splash-screen": "latest"
   },
   "devDependencies": {
     "@capacitor/cli": "latest",

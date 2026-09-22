@@ -26,6 +26,8 @@
         justify-content: center;
         align-items: center;
         height: 100vh;
+        overflow: hidden;
+        touch-action: none;
         background: linear-gradient(
           45deg,
           #115dd8 0%,
@@ -88,7 +90,6 @@
 
     <script type="module">
       import { SplashScreen } from "@capacitor/splash-screen"
-      import Hammer from "hammerjs"
 
       function toss(val) {
         const coin = document.querySelector("#coin")
@@ -102,15 +103,28 @@
         setTimeout(() => (coin.dataset.state = face), 1000)
       }
 
-      const mc = new Hammer(document.body)
-      mc.get("swipe").set({ direction: Hammer.DIRECTION_ALL })
-      mc.on("swipe tap", function (event) {
-        toss(event.type === "swipe" ? 1 : 0)
+      const moveStart = { x: 0, y: 0 }
+      const moveEnd = { x: 0, y: 0 }
+      const moveThreshold = 30
+
+      document.addEventListener("pointerdown", (event) => {
+        moveStart.x = event.screenX
+        moveStart.y = event.screenY
       })
 
-      setTimeout(() => {
-        SplashScreen.hide()
-      }, 1000)
+      document.addEventListener("pointerup", (event) => {
+        moveEnd.x = event.screenX
+        moveEnd.y = event.screenY
+
+        const deltaX = moveEnd.x - moveStart.x
+        const deltaY = moveEnd.y - moveStart.y
+        const isMove =
+          Math.abs(deltaX) > moveThreshold || Math.abs(deltaY) > moveThreshold
+
+        toss(isMove ? 1 : 0)
+      })
+
+      SplashScreen.hide()
     </script>
   </body>
 </html>
